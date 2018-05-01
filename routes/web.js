@@ -9,6 +9,6 @@ global.app.use(function(req, response, next) {
     response.setHeader("Access-Control-Allow-Headers", "access-control-allow-credentials,access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type");
   return next();
 });
-router.post("/auth/signup", Controller.AuthController.signup);
+router.get("/auth/signup", Controller.AuthController.signup);
 
 module.exports = router;
