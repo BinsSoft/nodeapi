@@ -27,7 +27,7 @@ global.app.use(global.session({
 	  },
 	rolling: true
 }));
-
+app.use(express.static(__dirname + '/public'));
 global.systems = require('./systems');
 
 global.app.set('port', (process.env.PORT || 3000));
