@@ -1,5 +1,21 @@
+const Model = require("../../systems/model");
 module.exports = {
-	index : function(req, res) {
-		res.send("<h1 style='text-align:center'>Welcome To BinsSoft Node API</h1>");
+	searchUser : function(req, res) {
+		let term = req.query.term;
+		var result = [];
+		if(term != ''){
+			Model.expense.users.searchByName(term, (data)=>{
+				
+				for(let u of data) {
+					result.push({
+						id : u.get('_id'),
+						name : u.get('name')
+					});
+				}
+				res.send(result)
+			})
+		} else {
+			res.send(result)
+		}
 	}
 }

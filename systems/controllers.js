@@ -35,5 +35,4 @@ global.fs.readdirSync(filePath).forEach(file => {
 	}
 	
 })
-console.log(JSON.stringify(Controller));
 module.exports =  Controller;
