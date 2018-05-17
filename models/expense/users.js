@@ -68,7 +68,7 @@ const User = {
 			
 			if(data) {
 
-				callback({status:hashData, user : data});
+				callback({status:true, user : data});
 			} else {
 				callback({status: false});
 			}
