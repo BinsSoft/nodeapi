@@ -43,8 +43,15 @@ const User = {
 	},
 
 	insert : function(data,callback) {
-		
-		global.systems.config.bcrypt.init().hash(data.password, global.systems.config.bcrypt.saltRounds, function(err, hash) {
+		var insertdata = new MODEL(data);
+		insertdata.save(function(err,data){
+			if (err) {
+			callback(err);
+			} else {
+			callback(data);
+			}
+		});
+		/*global.systems.config.bcrypt.init().hash(data.password, global.systems.config.bcrypt.saltRounds, function(err, hash) {
 			data.password = hash;
 			var insertdata = new MODEL(data);
 			insertdata.save(function(err,data){
@@ -54,10 +61,19 @@ const User = {
 				callback(data);
 				}
 			});
-		});
+		});*/
 	},
 	checkLogin : function(postData, callback) {
-		MODEL.findOne({phoneno: postData.phoneno}).exec().then(function(data){
+		MODEL.findOne({phoneno: postData.phoneno, password: postData.password}).exec().then(function(data){
+			
+			if(data) {
+
+				callback({status:hashData, user : data});
+			} else {
+				callback({status: false});
+			}
+		})
+		/*MODEL.findOne({phoneno: postData.phoneno}).exec().then(function(data){
 			
 			if(data) {
 
@@ -68,7 +84,7 @@ const User = {
 			} else {
 				callback({status: false});
 			}
-		})
+		})*/
 		
 	}
 };
