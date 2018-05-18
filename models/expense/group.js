@@ -79,7 +79,9 @@ const Group = {
           function(err, res){
             callback(res);
           })
-	}
+	},
+
+	
 }
 
 module.exports = Group;

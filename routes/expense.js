@@ -20,5 +20,7 @@ router.post("/"+prefix+"/user-groups", Controller.expenseapp.GroupController.get
 router.post("/"+prefix+"/groups-details", Controller.expenseapp.GroupController.getGroupDetails);
 router.post("/"+prefix+"/member-deposit-edit", Controller.expenseapp.GroupController.memberDepositEdit);
 router.post("/"+prefix+"/save-pay", Controller.expenseapp.GroupController.memberSavePay);
+router.post("/"+prefix+"/group-expense-history", Controller.expenseapp.GroupController.groupExpenseHistory);
+router.post("/"+prefix+"/delete-group-expense", Controller.expenseapp.GroupController.deleteGroupExpense);
 
 module.exports = router;

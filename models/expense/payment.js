@@ -149,6 +149,29 @@ const Group = {
 			}
 			
 		})
+	},
+
+	getGroupExpense(groupId, callback)
+	{
+		MODEL.find(
+			{
+				groupId : new ObjectId(groupId),
+				type : { $ne : 'Deposit' }
+			})
+		.sort({payDate: -1})
+		.exec()
+		.then((data)=>{
+			callback(data);
+		})
+	},
+	deleteExpense(expenseId, callback) {
+		MODEL.remove({_id: new ObjectId(expenseId)}, function(err){
+			if(!err) {
+				callback(true);
+			} else {
+				callback(false);
+			}
+		})
 	}
 }
 

@@ -142,5 +142,46 @@ module.exports = {
 			res.send({msg : 'success'});
 		})
 
+	},
+
+	groupExpenseHistory : function(req, res)
+	{
+		groupId  = req.body.id;
+		var promises = [];
+		var result = [];
+		global.systems.model.expense.payment.getGroupExpense(groupId, (responseData)=>{
+			for(let expense of responseData) {
+
+				
+
+				promises.push( new Promise((resolve, reject)=>{
+
+					global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('paidBy'))}, (userData)=>{
+						var row = {
+							id : expense._id,
+							description : expense.get('description'),
+							amount : parseFloat(expense.get('amount')).toFixed(2),
+							type : expense.get('type'),
+							payDate : expense.get('payDate'),
+							sharewith : expense.get('sharewith'),
+							paidUser : userData.get('name'),
+							paidBy : userData.get('_id')
+						}
+							
+							resolve(row);
+					})
+				}))
+			}
+			Promise.all(promises).then((expenseList)=>{
+				res.send(expenseList);
+			})
+		});
+		
+	},
+
+	deleteGroupExpense : function(req, res) {
+		global.systems.model.expense.payment.deleteExpense(req.body.id, (responsedata)=>{
+			res.send({status : responsedata});
+		})
 	}
 }
