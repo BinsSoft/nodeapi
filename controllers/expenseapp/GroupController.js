@@ -118,6 +118,9 @@ module.exports = {
 	},
 
 	memberSavePay : function(req, res) {
+		if(req.body.id != undefined) {
+			global.systems.model.expense.payment.deleteExpense(req.body.id, (returnData)=>{});
+		}
 		let payData = {
 			paidBy : new ObjectId(req.body.payBy),
 			groupId : new ObjectId(req.body.groupId),
@@ -182,6 +185,31 @@ module.exports = {
 	deleteGroupExpense : function(req, res) {
 		global.systems.model.expense.payment.deleteExpense(req.body.id, (responsedata)=>{
 			res.send({status : responsedata});
+		})
+	},
+
+	addGroupMember : function(req, res) {
+
+		global.systems.model.expense.group.addMember(req.body.id, req.body.user, (responseData)=>{
+			global.systems.model.expense.group.getGroupDetails(req.body.id, (returnData)=>{
+				var admin = returnData.get('members').find(function(m){
+					return m.admin == 1;
+				})
+				global.systems.model.expense.payment.insert({
+							paidBy : new ObjectId(req.body.user.id),
+							groupId : new ObjectId(req.body.id),
+							sharewith : [{id : new ObjectId(admin.id), name : admin.name}],
+							amount : parseInt(req.body.user.deposit),
+							parHeadAmount : parseInt(req.body.user.deposit),
+							type : 'Deposit',
+							addedBy : new ObjectId(admin.id),
+							addedOn : new Date(),
+						}, (payData)=> {
+							
+							res.send(responseData);
+						})
+			});
+			
 		})
 	}
 }

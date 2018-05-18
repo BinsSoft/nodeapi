@@ -81,7 +81,11 @@ const Group = {
           })
 	},
 
-	
+	addMember(groupId, userData, callback) {
+		MODEL.update({ _id : new ObjectId(groupId) }, {$push : {members: userData}} , {upsert: true}, (err,data)=>{
+			callback(data);
+		} )
+	}
 }
 
 module.exports = Group;

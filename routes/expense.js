@@ -22,5 +22,6 @@ router.post("/"+prefix+"/member-deposit-edit", Controller.expenseapp.GroupContro
 router.post("/"+prefix+"/save-pay", Controller.expenseapp.GroupController.memberSavePay);
 router.post("/"+prefix+"/group-expense-history", Controller.expenseapp.GroupController.groupExpenseHistory);
 router.post("/"+prefix+"/delete-group-expense", Controller.expenseapp.GroupController.deleteGroupExpense);
+router.post("/"+prefix+"/add-group-member", Controller.expenseapp.GroupController.addGroupMember);
 
 module.exports = router;
