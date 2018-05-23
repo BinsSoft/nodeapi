@@ -164,8 +164,28 @@ const Group = {
 			callback(data);
 		})
 	},
+	deleteGroupExpense(groupId, callback)
+	{
+		MODEL.remove(
+			{
+				groupId : new ObjectId(groupId),
+			}, (data)=>{
+			callback(data);
+		})
+	},
 	deleteExpense(expenseId, callback) {
 		MODEL.remove({_id: new ObjectId(expenseId)}, function(err){
+			if(!err) {
+				callback(true);
+			} else {
+				callback(false);
+			}
+		})
+	},
+
+	deleteMemberExpense(groupId, userId, callback)
+	{
+		MODEL.remove({groupId: new ObjectId(groupId), paidBy: new ObjectId(userId)}, function(err){
 			if(!err) {
 				callback(true);
 			} else {

@@ -211,5 +211,24 @@ module.exports = {
 			});
 			
 		})
+	},
+
+	deleteGroup : function(req, res)
+	{
+		global.systems.model.expense.group.deleteGroup(req.body.id,(returnData)=>{
+			global.systems.model.expense.payment.deleteGroupExpense(req.body.id,(responseData)=>{
+				res.send({status:true});	
+			})
+		})
+	},
+
+	deleteGroupUser : function(req, res)
+	{
+		global.systems.model.expense.group.deleteGroupUser(req.body.groupId, req.body.userId,(returnData)=>{
+			global.systems.model.expense.payment.deleteMemberExpense(req.body.groupId, req.body.userId, (response)=>{
+				res.send({status:true});	
+			})
+			
+		})
 	}
 }

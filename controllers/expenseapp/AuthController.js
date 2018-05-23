@@ -32,5 +32,11 @@ module.exports = {
 				res.send({status:0, message : 'Login Failed, check phone no and password'});
 			}
 		});
+	},
+
+	resetPassword : function(req, res) {
+		global.systems.model.expense.users.resetPassword(req.body, (responsedata)=>{
+			res.send({status:true});
+		})
 	}
 }

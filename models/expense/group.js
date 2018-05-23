@@ -85,6 +85,23 @@ const Group = {
 		MODEL.update({ _id : new ObjectId(groupId) }, {$push : {members: userData}} , {upsert: true}, (err,data)=>{
 			callback(data);
 		} )
+	},
+
+	deleteGroup(groupId, callback) {
+		MODEL.remove({_id: new ObjectId(groupId)}, function(err){
+			if(!err) {
+				callback(true);
+			} else {
+				callback(false);
+			}
+		})
+	},
+
+	deleteGroupUser(groupId, userId, callback)
+	{
+		MODEL.update({ _id : new ObjectId(groupId) }, {$pull : {"members": { "id": userId}}} , {upsert: true}, (err,data)=>{
+			callback(data);
+		} )
 	}
 }
 

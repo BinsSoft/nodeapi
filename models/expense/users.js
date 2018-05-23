@@ -1,6 +1,7 @@
 'use strict';
 const Schema = global.mongoose.Schema;
 const table = process.env.EXPANSE_APP+'_users';
+var ObjectId = global.mongoose.Types.ObjectId;
 const model_schema = new Schema(
 		{ type: Schema.Types.Mixed }, 
 		{ strict : false, versionKey: false }
@@ -86,6 +87,17 @@ const User = {
 			}
 		})*/
 		
+	},
+
+	resetPassword : function(postData,callback)
+	{
+		MODEL.update({ _id : new ObjectId(postData.id) }, {
+            $set : {
+              "password" : postData.password
+            }
+          }, {upsert: true}, (err,data)=>{
+			callback(data);
+		} )
 	}
 };
 
