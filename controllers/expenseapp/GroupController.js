@@ -159,19 +159,23 @@ module.exports = {
 
 				promises.push( new Promise((resolve, reject)=>{
 
-					global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('paidBy'))}, (userData)=>{
-						var row = {
-							id : expense._id,
-							description : expense.get('description'),
-							amount : parseFloat(expense.get('amount')).toFixed(2),
-							type : expense.get('type'),
-							payDate : expense.get('payDate'),
-							sharewith : expense.get('sharewith'),
-							paidUser : userData.get('name'),
-							paidBy : userData.get('_id')
-						}
-							
+					global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('paidBy'))}, (paidByuserData)=>{
+						global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('addedBy'))}, (addedByuserData)=>{
+							var row = {
+								id : expense._id,
+								description : expense.get('description'),
+								amount : parseFloat(expense.get('amount')).toFixed(2),
+								type : expense.get('type'),
+								payDate : expense.get('payDate'),
+								sharewith : expense.get('sharewith'),
+								paidUser : paidByuserData.get('name'),
+								paidBy : paidByuserData.get('_id'),
+								addedBy : addedByuserData.get('name')
+							}
 							resolve(row);
+						});
+							
+							
 					})
 				}))
 			}

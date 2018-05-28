@@ -16,7 +16,7 @@ var DB = {
 			if(DB.password != null) {
 				mongoConnectStr += ":"+DB.password+"@";
 			}
-			mongoConnectStr += DB.host + ":"+DB.port+"/"+DB.database;//+'?authSource='+DB.authdb;
+			mongoConnectStr += DB.host + ":"+DB.port+"/"+DB.database+'?authSource='+DB.authdb;
 			//console.log(mongoConnectStr);
 			global.mongoose.connect(mongoConnectStr,(err)=> {
 				console.log("3) Mongo db server starts")
