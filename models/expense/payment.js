@@ -192,6 +192,37 @@ const Group = {
 				callback(false);
 			}
 		})
+	},
+
+	getTotalByCategory(groupId,type, callback)
+	{
+		var groupColumn ;
+		if(type == 'type' || type == 'paidBy') {
+			groupColumn = '$'+type;
+		} else if(type == 'date') {
+			groupColumn = {year:{'$year': '$addedOn'},month:{'$month':'$addedOn'}}
+		}
+		MODEL.aggregate([
+		{
+	        $match: {
+	        	groupId : new ObjectId(groupId)
+	            }
+	     }, 
+	     {
+	         $group: {
+	                _id: groupColumn, 
+	                total :{$sum :'$amount'}
+	                }
+	     },
+	     {
+	     	$sort : {
+	     		total : -1
+	     	}
+	     }
+		]).then((data)=>{
+			callback(data)
+			
+		})
 	}
 }
 

@@ -234,5 +234,36 @@ module.exports = {
 			})
 			
 		})
+	},
+
+	getGroupStatistics : function(req, res)
+	{
+		global.systems.model.expense.payment.getTotalByCategory(req.body.id,'type', (categoryTotalData)=>{
+			var data = {};
+			data.category = categoryTotalData;
+			global.systems.model.expense.payment.getTotalByCategory(req.body.id,'paidBy',(userTotalData)=>{
+				data.paidBy = [];
+				var promises = [];
+				if(userTotalData) {
+					for(let u of userTotalData){
+						promises.push(new Promise((resolve,reject)=>{
+							global.systems.model.expense.users.fetchOne({_id: new ObjectId( u._id )}, (uData)=>{
+									resolve({
+										name : uData.get('name'),
+										total : u.total
+									});
+							})
+						}))
+					}
+				}
+				Promise.all(promises).then((userData)=>{
+					data.paidBy = userData;
+					global.systems.model.expense.payment.getTotalByCategory(req.body.id,'date',(dateTotalData)=>{
+						data.date = dateTotalData;
+						res.send(data);	
+					});
+				})
+			});
+		});
 	}
 }

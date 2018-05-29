@@ -26,5 +26,6 @@ router.post("/"+prefix+"/add-group-member", Controller.expenseapp.GroupControlle
 router.post("/"+prefix+"/delete-group", Controller.expenseapp.GroupController.deleteGroup);
 router.post("/"+prefix+"/delete-group-user", Controller.expenseapp.GroupController.deleteGroupUser);
 router.post("/"+prefix+"/reset-password", Controller.expenseapp.AuthController.resetPassword);
+router.post("/"+prefix+"/group-statistics", Controller.expenseapp.GroupController.getGroupStatistics);
 
 module.exports = router;
