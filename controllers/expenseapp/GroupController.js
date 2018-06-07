@@ -118,7 +118,7 @@ module.exports = {
 	},
 
 	memberSavePay : function(req, res) {
-		if(req.body.id != undefined) {
+		if(req.body.id != undefined || req.body.id !='') {
 			global.systems.model.expense.payment.deleteExpense(req.body.id, (returnData)=>{});
 		}
 		let payData = {
