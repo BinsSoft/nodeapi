@@ -3,6 +3,13 @@ var ObjectId = global.mongoose.Types.ObjectId;
 module.exports = {
 	create : function(req, res) {
 		var postData = req.body;
+		postData.createdBy = new ObjectId(postData.createdBy);
+		members = postData.members;
+		for(let m in postData.members ) {
+	 		members[m]['id'] = new ObjectId(members[m]['id']);
+	 	}
+	 	postData.members = members;
+
 		if(postData.startdate) {
 			postData.startdate = new Date(postData.startdate);
 		}
@@ -265,5 +272,21 @@ module.exports = {
 				})
 			});
 		});
-	}
+	},
+
+	setGroupAdmin(req, res)
+	 {
+	 	var members = req.body.members;
+	 	for(let m in req.body.members ) {
+	 		members[m]['id'] = new ObjectId(members[m]['id']);
+	 	}
+	 	
+	 	global.systems.model.expense.group.updateMemberGroup(req.body.groupId, members, (resdata)=>{
+	 		var adminUser = req.body.adminUser;
+	 		adminUser.id = new ObjectId(adminUser.id);
+	 		global.systems.model.expense.payment.changeGroupDepositUser(req.body.groupId, [adminUser], (responseData)=>{
+	 			res.send(responseData);
+	 		})
+	 	} )
+	 }
 }

@@ -7,6 +7,7 @@ var DB = {
 	password : (process.env.DB_PASSWORD || null),
 
 	connection : function(dataBaseName) {
+
 		if(process.env.DB_DRIVER && process.env.DB_DRIVER=='mongo' ) {
 			global.mongoose.Promise = global.Promise;
 			var mongoConnectStr = "mongodb://";

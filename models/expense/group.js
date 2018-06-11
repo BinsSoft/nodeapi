@@ -26,7 +26,7 @@ const Group = {
 
 	userGroups : function(userId, callback) {
 		MODEL.find({ 
-				"members": { $elemMatch: { id : userId} }
+				"members": { $elemMatch: { id : new ObjectId(userId)} }
 			})
 			.exec()
 			.then( (data)=>{
@@ -102,7 +102,24 @@ const Group = {
 		MODEL.update({ _id : new ObjectId(groupId) }, {$pull : {"members": { "id": userId}}} , {upsert: true}, (err,data)=>{
 			callback(data);
 		} )
-	}
+	},
+
+	updateMemberGroup : function(groupId, members, callback)
+	{
+		MODEL.update(
+          {
+            _id : groupId
+          },
+          {
+            $set : {
+              "members" : members
+            }
+          },
+          {upsert: true}, 
+          function(err, res){
+            callback(res);
+          })
+	},
 }
 
 module.exports = Group;

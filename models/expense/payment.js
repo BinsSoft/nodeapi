@@ -223,6 +223,23 @@ const Group = {
 			callback(data)
 			
 		})
+	},
+
+	changeGroupDepositUser(groupId, shareMember, callback) {
+		MODEL.update(
+          {
+            groupId : new ObjectId(groupId),
+            type : 'Deposit'
+          },
+          {
+            $set : {
+              "sharewith" : shareMember
+            }
+          },
+          {multi: true}, 
+          function(err, res){
+            callback(res);
+          })
 	}
 }
 
