@@ -9,7 +9,8 @@ module.exports = {
 				for(let u of data) {
 					result.push({
 						id : u.get('_id'),
-						name : u.get('name')
+						name : u.get('name'),
+						phoneno : u.get('phoneno')
 					});
 				}
 				res.send(result)
