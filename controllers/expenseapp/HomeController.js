@@ -17,5 +17,32 @@ module.exports = {
 		} else {
 			res.send(result)
 		}
+	},
+
+	checkUuid(req, res)
+	{
+		let uuid = req.body.uuid;
+		global.systems.model.expense.users.checkUuid(uuid, (responseData)=>{
+			if(responseData) {
+				res.send({
+					status:1, 
+					message : 'already inserted', 
+					user : {
+						id : responseData.get('_id'),
+						name : responseData.get('name'),
+						phone : responseData.get('phoneno')
+					}
+				});
+			} else {
+				res.send({status:0, message :'new uuid'});
+			}
+		})
+	},
+
+	removeUuid(req, res) {
+		let uuid = req.body.uuid;
+		global.systems.model.expense.users.removeUuid(uuid, (responseData)=>{
+			res.send({"status":1});
+		})
 	}
 }

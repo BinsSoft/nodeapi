@@ -16,8 +16,11 @@ module.exports = {
 	},
 	signin : function(req, res) {
 		var postData = req.body;
-		postData.phoneno = (postData.phoneno).toString();
-		global.systems.model.expense.users.checkLogin(postData, (checkData) => {
+		var postElements = {
+			phoneno : (postData.phoneno).toString(),
+			password : postData.password
+		}
+		global.systems.model.expense.users.checkLogin(postElements, (checkData) => {
 			
 			if (checkData.status == true) {
 				
@@ -26,7 +29,11 @@ module.exports = {
 					name : checkData.user.get('name'),
 					phone : checkData.user.get('phoneno')
 				}
-				res.send({status:1, message : 'success' , userdata : userdata})
+				//res.send(postData);
+				global.systems.model.expense.users.addUuid(userdata.id, postData.uuid , (returnData)=>{
+					res.send({status:1, message : 'success' , userdata : userdata})	
+				})
+				
 			} else {
 				
 				res.send({status:0, message : 'Login Failed, check phone no and password'});

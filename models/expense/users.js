@@ -98,6 +98,35 @@ const User = {
           }, {upsert: true}, (err,data)=>{
 			callback(data);
 		} )
+	},
+
+	checkUuid(uuid,callback)
+	{
+		MODEL.findOne({uuid: uuid}).exec()
+		.then((data)=>{
+			callback(data);
+		})
+	},
+
+	addUuid : function(userId, uuid, callback)
+	{
+		MODEL.update({ _id : new ObjectId(userId) }, {
+            $set : {
+              "uuid" : uuid
+            }
+          }, {upsert: true}, (err,data)=>{
+			callback(data);
+		} )
+	},
+
+	removeUuid(uuid, callback) {
+		MODEL.update({ uuid : uuid }, {
+            $set : {
+              "uuid" : ''
+            }
+          }, {upsert: true}, (err,data)=>{
+			callback(data);
+		} )
 	}
 };
 
