@@ -1,6 +1,7 @@
 const express 		= require('express');
 global.app 			= express();
 const http 			= require('http').Server(global.app);
+global.io	 		= require('socket.io')(http);
 global.fs 			= require("fs");
 global.path 		= require('path');
 global.multer 		= require('multer');

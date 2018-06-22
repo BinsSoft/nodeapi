@@ -200,27 +200,35 @@ module.exports = {
 	},
 
 	addGroupMember : function(req, res) {
-
-		global.systems.model.expense.group.addMember(req.body.id, req.body.user, (responseData)=>{
-			global.systems.model.expense.group.getGroupDetails(req.body.id, (returnData)=>{
-				var admin = returnData.get('members').find(function(m){
-					return m.admin == 1;
-				})
-				global.systems.model.expense.payment.insert({
-							paidBy : new ObjectId(req.body.user.id),
-							groupId : new ObjectId(req.body.id),
-							sharewith : [{id : new ObjectId(admin.id), name : admin.name}],
-							amount : parseInt(req.body.user.deposit),
-							parHeadAmount : parseInt(req.body.user.deposit),
-							type : 'Deposit',
-							addedBy : new ObjectId(admin.id),
-							addedOn : new Date(),
-						}, (payData)=> {
-							
-							res.send(responseData);
-						})
+		global.systems.model.expense.group.getGroupDetails(req.body.id, (returnData)=>{
+			let newUser = req.body.user;
+			let checkmemberExist = returnData.get('members').find(function(m){
+				return (newUser.id == m.id);
 			});
-			
+			if(checkmemberExist == null) {
+
+				global.systems.model.expense.group.addMember(req.body.id, newUser, (responseData)=>{
+				
+					var admin = returnData.get('members').find(function(m){
+						return m.admin == 1;
+					})
+					global.systems.model.expense.payment.insert({
+								paidBy : new ObjectId(req.body.user.id),
+								groupId : new ObjectId(req.body.id),
+								sharewith : [{id : new ObjectId(admin.id), name : admin.name}],
+								amount : parseInt(req.body.user.deposit),
+								parHeadAmount : parseInt(req.body.user.deposit),
+								type : 'Deposit',
+								addedBy : new ObjectId(admin.id),
+								addedOn : new Date(),
+							}, (payData)=> {
+								
+								res.send(responseData);
+							})
+				});
+			} else {
+				res.send({status:0, message: newUser.name+' alread in this group'});
+			}
 		})
 	},
 
