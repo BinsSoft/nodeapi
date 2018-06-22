@@ -6,5 +6,12 @@ module.exports = {
 			}
 
 		});
+		socket.on('players-result', function(data){
+			if (data) {
+				io.sockets.emit("game-players-result",data);
+			}
+
+		});
+		
 	}
 }
