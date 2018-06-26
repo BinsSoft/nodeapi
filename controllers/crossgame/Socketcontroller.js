@@ -12,6 +12,10 @@ module.exports = {
 			}
 
 		});
-		
+		socket.on("players-engage", function(data)=>{
+			if (data) {
+				io.sockets.emit("players-engage-result",data);
+			}			
+		});
 	}
 }
