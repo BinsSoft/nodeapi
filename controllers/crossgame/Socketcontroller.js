@@ -12,7 +12,7 @@ module.exports = {
 			}
 
 		});
-		socket.on("players-engage", function(data)=>{
+		socket.on("players-engage", (data)=>{
 			if (data) {
 				io.sockets.emit("players-engage-result",data);
 			}			
