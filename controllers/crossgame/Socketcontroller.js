@@ -3,12 +3,13 @@ module.exports = {
 		socket.on('players', function(data){
 			if (data) {
 				io.sockets.emit("game-players",data);
+				socket.join(data.gameId);
 			}
 
 		});
 		socket.on('players-result', function(data){
 			if (data) {
-				io.sockets.emit("game-players-result",data);
+				io.socketsin(data.gameId).emit("game-players-result",data);
 			}
 
 		});
