@@ -9,7 +9,7 @@ module.exports = {
 		});
 		socket.on('players-result', function(data){
 			if (data) {
-				io.socketsin(data.gameId).emit("game-players-result",data);
+				io.sockets.in(data.gameId).emit("game-players-result",data);
 			}
 
 		});
