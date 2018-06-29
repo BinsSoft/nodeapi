@@ -13,9 +13,9 @@ module.exports = {
 			}
 
 		});
-		socket.on("players-engage", (data)=>{
+		socket.on("toss-emmit", (data)=>{
 			if (data) {
-				io.sockets.emit("players-engage-result",data);
+				io.sockets.emit("toss-emmit-result",data);
 			}			
 		});
 	}
