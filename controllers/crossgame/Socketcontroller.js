@@ -15,8 +15,7 @@ module.exports = {
 		});
 		socket.on("toss-emmit", (data)=>{
 			if (data) {
-				console.log(data);
-				io.sockets.emit("toss-emmit-result",data);
+				io.sockets.in(data.gameId).emit("toss-emmit-result",data);
 			}			
 		});
 	}
