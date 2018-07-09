@@ -13,9 +13,9 @@ module.exports = {
 			}
 
 		});
-		socket.on("players-engage", (data)=>{
+		socket.on("toss-emmit", (data)=>{
 			if (data) {
-				io.sockets.emit("players-engage-result",data);
+				io.sockets.in(data.gameId).emit("toss-emmit-result",data);
 			}			
 		});
 	}
