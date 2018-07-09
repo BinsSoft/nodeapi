@@ -296,5 +296,56 @@ module.exports = {
 	 			res.send(responseData);
 	 		})
 	 	} )
+	 },
+
+	 exportReport(req, res)
+	 {
+	 	const groupId = req.params.groupid;
+	 	const csv = require('fast-csv');
+	 	var csvStream = csv.createWriteStream({headers: true}),
+		    writableStream = fs.createWriteStream("public/expense/"+groupId+".csv");
+		 
+		writableStream.on("finish", function(){
+		  console.log("DONE!");
+		});
+		csvStream.pipe(writableStream);
+		var promises = [];
+		var result = [];
+		global.systems.model.expense.payment.getGroupExpense(groupId, (responseData)=>{
+			for(let expense of responseData) {
+				promises.push( new Promise((resolve, reject)=>{
+
+					global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('paidBy'))}, (paidByuserData)=>{
+						global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('addedBy'))}, (addedByuserData)=>{
+							let shareWith = expense.get('sharewith');
+							let shareUsers = '';
+							for (let s of shareWith) {
+								shareUsers += s.name+",";
+							}
+							var row = {
+								'Description' : expense.get('description'),
+								'Amount' : parseFloat(expense.get('amount')).toFixed(2),
+								'Type' : expense.get('type'),
+								'Pay Date' : expense.get('payDate').toString(),
+								'Share with' : shareUsers,
+								'Paid user' : paidByuserData.get('name'),
+								//paidBy : paidByuserData.get('_id'),
+								'Added by' : addedByuserData.get('name')
+							}
+							csvStream.write(row);
+							resolve(row);
+						});
+							
+							
+					})
+				}))
+			}
+			Promise.all(promises).then((expenseList)=>{
+				csvStream.end();
+				res.send({status:1});
+			})
+		});
+		
+		
 	 }
 }
