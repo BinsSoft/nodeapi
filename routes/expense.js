@@ -31,5 +31,5 @@ router.post("/"+prefix+"/group-admin-set", Controller.expenseapp.GroupController
 router.post("/"+prefix+"/check-uuid", Controller.expenseapp.HomeController.checkUuid);
 router.post("/"+prefix+"/remove-uuid", Controller.expenseapp.HomeController.removeUuid);
 router.get("/"+prefix+"/export-report/:groupid", Controller.expenseapp.GroupController.exportReport);
-
+router.get("/"+prefix+"/backup/:type", Controller.expenseapp.HomeController.backup);
 module.exports = router;

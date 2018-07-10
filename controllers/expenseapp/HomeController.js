@@ -45,5 +45,36 @@ module.exports = {
 		global.systems.model.expense.users.removeUuid(uuid, (responseData)=>{
 			res.send({"status":1});
 		})
-	}
+	},
+
+	backup(req, res) {
+		var filePath = '';
+		var model = "";
+		switch (req.params.type) {
+			case "user":
+				filePath = 'public/expense/backup/users.json';
+				model = global.systems.model.expense.users;
+			break;
+			case "group":
+				filePath = 'public/expense/backup/groups.json';
+				model = global.systems.model.expense.group;
+			break;
+			case "payment":
+				filePath = 'public/expense/backup/payments.json';
+				model = global.systems.model.expense.payment;
+			break;
+		}
+		model.fetch({},(data)=> {
+			data  = JSON.stringify(data);
+			//res.send(data);
+			global.fs.writeFile(filePath, data, function(err){
+				if (err) {
+					res.send(err);
+				}
+				res.send("done");
+			});
+		})
+		
+	},
+	
 }

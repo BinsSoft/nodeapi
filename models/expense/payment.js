@@ -11,6 +11,13 @@ const MODEL = global.mongoose.model(
 	model_schema, 
 	table);
 const Group = {
+	fetch : function(query, callback) {
+		MODEL.find(query)
+		.exec()
+		.then(function(data){
+			callback(data);
+		})
+	},
 	insert : function(data,callback) {
 		
 		var insertdata = new MODEL(data);
