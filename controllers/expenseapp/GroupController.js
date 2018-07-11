@@ -329,7 +329,6 @@ module.exports = {
 								'Pay Date' : expense.get('payDate').toString(),
 								'Share with' : shareUsers,
 								'Paid user' : paidByuserData.get('name'),
-								//paidBy : paidByuserData.get('_id'),
 								'Added by' : addedByuserData.get('name')
 							}
 							csvStream.write(row);

@@ -10,6 +10,7 @@ global.session 		= require('express-session');
 global.Cookies 		= require('cookies');
 global.mongo 		= require('mongodb');
 global.mongoose 	= require('mongoose');
+global.moment 		= require('moment'); 
 require('dotenv').config();
 
 global.app.use( global.bodyParser.json({limit: '50mb'}) );       // to support JSON-encoded bodies
