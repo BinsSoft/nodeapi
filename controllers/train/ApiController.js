@@ -6,18 +6,16 @@ var request 		= require('request');
 module.exports = {
 
 	trainDetails(req, res) {
-		
-		const trainNo = req.params.id;
-		let apuUrl = api.url+'searchTrains/api-key/web-'+ api.key+'?trainno='+trainNo;
-		request(apuUrl, function(error, response){
+		//res.send(req.body);
+		//https://api.railbeeps.com/api/fetchAvailability/api-key/web-cf1de6ecb6d81d7fdbbd4a0ee20df4d5/trainno/3159/from/3440/to/312/doj/Thu,%2012th%20Jul
+
+		let apiUrl = api.url+'fetchAvailability/api-key/web-'+ api.key+'/trainno/'+req.body.trainid+'/from/'+req.body.source+'/to/'+req.body.dest+'/doj/'+global.moment().format('YYYY-MM-DD');
+		//let apiUrl = 'http://testyourprojects.biz/custom/test_tonmoy/train.json';
+		request(apiUrl, function(error, response){
 			let data = JSON.parse(response.body);
 			let result = {
-				status : 0,
-				body : {}
-			}
-			if(data.length > 0) {
-				result.status = 1;
-				result.body = data[0]; 
+				status : 1,
+				body : data
 			}
 			res.send(result);
 		})
@@ -36,7 +34,7 @@ module.exports = {
 	},
 
 	trainBetweenStation(req, res) {
-		let apuUrl = api.url+'getTrainsBetweenStations/api-key/web-'+ api.key+'/from/'+req.body.source+'/to/'+req.body.destination+'/date/'+global.moment().format('YYYY-MM-DD')+'/sortby/departure/orderby/DESC/search/yes';
+		let apuUrl = api.url+'getTrainsBetweenStations/api-key/web-'+ api.key+'/from/'+req.body.source+'/to/'+req.body.destination+'/date/'+global.moment().format('YYYY-MM-DD')+'/sortby/departure/orderby/ASC/search/yes';
 
 		request(apuUrl, function(error, response){
 			let data = JSON.parse(response.body);
