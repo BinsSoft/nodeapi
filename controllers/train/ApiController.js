@@ -46,8 +46,8 @@ module.exports = {
 	},
 
 	trainCurrentStatus(req, res) {
-		//let apiUrl = api.url+'getRunningStatus/api-key/web-'+ api.key+'/trainno/'+req.body.trainid+'/date/'+global.moment().format('YYYY-MM-DD');
-		let apiUrl = 'http://testyourprojects.biz/custom/test_tonmoy/train.json';
+		let apiUrl = api.url+'getRunningStatus/api-key/web-'+ api.key+'/trainno/'+req.body.trainid+'/date/'+global.moment().format('YYYY-MM-DD');
+		//let apiUrl = 'http://testyourprojects.biz/custom/test_tonmoy/train.json';
 		
 		request(apiUrl, function(error, response){
 			let data = JSON.parse(response.body);
