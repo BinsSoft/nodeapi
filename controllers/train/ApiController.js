@@ -22,14 +22,14 @@ module.exports = {
 	trainNameSearch(req, res) {
 		let searchQuery = req.query.s;
 		searchQuery = searchQuery.toUpperCase();
-		const file = 'public/train/stations.json';
-		global.fs.readFile(file, 'utf8', function (err, stations){
-			stations = JSON.parse(stations);
-			let searchData = stations.find((i)=>{
-				return i.code.startsWith(searchQuery) || i.display.startsWith(searchQuery) 
+		let apiUrl = api.url+'searchTrains/api-key/web-'+api.key+'?trainno='+searchQuery;
+		request(apiUrl, function(error, response){
+			let data = JSON.parse(response.body);
+			res.send({
+				status : 1,
+				body : data
 			});
-			res.send(searchData);
-		});
+		})
 	},
 
 	trainBetweenStation(req, res) {
@@ -57,5 +57,5 @@ module.exports = {
 			});
 		})
 	}
-	//https://api.railbeeps.com/api/getRunningStatus/api-key/web-cf1de6ecb6d81d7fdbbd4a0ee20df4d5/trainno/3159/date/Thu,%2012th%20Jul
+	
 }
