@@ -165,7 +165,7 @@ const Group = {
 				groupId : new ObjectId(groupId),
 				type : { $ne : 'Deposit' }
 			})
-		.sort({payDate: -1})
+		.sort({_id: -1})
 		.exec()
 		.then((data)=>{
 			callback(data);
