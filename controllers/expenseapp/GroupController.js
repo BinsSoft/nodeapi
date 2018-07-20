@@ -300,51 +300,26 @@ module.exports = {
 
 	 exportReport(req, res)
 	 {
-	 	const groupId = req.params.groupid;
-	 	const csv = require('fast-csv');
-	 	var csvStream = csv.createWriteStream({headers: true}),
-		    writableStream = fs.createWriteStream("public/expense/"+groupId+".csv");
-		 
-		writableStream.on("finish", function(){
-		  console.log("DONE!");
-		});
-		csvStream.pipe(writableStream);
-		var promises = [];
-		var result = [];
-		global.systems.model.expense.payment.getGroupExpense(groupId, (responseData)=>{
-			for(let expense of responseData) {
-				promises.push( new Promise((resolve, reject)=>{
+		const groupId = req.params.groupid;
+		var conversion = require("phantom-html-to-pdf")();
 
-					global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('paidBy'))}, (paidByuserData)=>{
-						global.systems.model.expense.users.fetchOne({_id : new ObjectId(expense.get('addedBy'))}, (addedByuserData)=>{
-							let shareWith = expense.get('sharewith');
-							let shareUsers = '';
-							for (let s of shareWith) {
-								shareUsers += s.name+",";
-							}
-							var row = {
-								'Description' : expense.get('description'),
-								'Amount' : parseFloat(expense.get('amount')).toFixed(2),
-								'Type' : expense.get('type'),
-								'Pay Date' : expense.get('payDate').toString(),
-								'Share with' : shareUsers,
-								'Paid user' : paidByuserData.get('name'),
-								'Added by' : addedByuserData.get('name')
-							}
-							csvStream.write(row);
-							resolve(row);
-						});
-							
-							
-					})
-				}))
-			}
-			Promise.all(promises).then((expenseList)=>{
-				csvStream.end();
-				res.send({status:1});
-			})
+		global.systems.model.expense.group.getGroupDetails(groupId, (returnData)=>{
+			var pdfResultHtml ='';
+			pdfResultHtml += '<h1>'+returnData.get('name')+'</h1>';
+			pdfResultHtml += "<p><strong>Start From :</strong> "+ global.moment(returnData.get('startdate')).format('DD-MM-YYYY')+"</p>";
+			pdfResultHtml += "<p><strong>Created On :</strong> "+ global.moment(returnData.get('createdOn')).format('DD-MM-YYYY')+"</p>";
+			conversion({ html: pdfResultHtml }, function(err, pdf) {
+				var output = global.fs.createWriteStream('public/expense/'+groupId+'.pdf')
+				console.log(pdf.logs);
+				// since pdf.stream is a node.js stream you can use it
+				// to save the pdf to a file (like in this example) or to
+				// respond an http request.
+				pdf.stream.pipe(output);
+				res.send(returnData);
+			});
 		});
-		
+
+
 		
 	 }
 }
