@@ -305,18 +305,124 @@ module.exports = {
 
 		global.systems.model.expense.group.getGroupDetails(groupId, (returnData)=>{
 			var pdfResultHtml ='';
-			pdfResultHtml += '<h1>'+returnData.get('name')+'</h1>';
-			pdfResultHtml += "<p><strong>Start From :</strong> "+ global.moment(returnData.get('startdate')).format('DD-MM-YYYY')+"</p>";
-			pdfResultHtml += "<p><strong>Created On :</strong> "+ global.moment(returnData.get('createdOn')).format('DD-MM-YYYY')+"</p>";
-			conversion({ html: pdfResultHtml }, function(err, pdf) {
-				var output = global.fs.createWriteStream('public/expense/'+groupId+'.pdf')
-				console.log(pdf.logs);
-				// since pdf.stream is a node.js stream you can use it
-				// to save the pdf to a file (like in this example) or to
-				// respond an http request.
-				pdf.stream.pipe(output);
-				res.send(returnData);
-			});
+			pdfResultHtml += '<h1 style="float:left">'+returnData.get('name')+'</h1>';
+			pdfResultHtml += '<div style="float:right; font-size:12px;">';
+			pdfResultHtml += "<p style='margin:0; padding:0;'><strong>Start From :</strong> "+ global.moment(returnData.get('startdate')).format('DD-MM-YYYY')+"</p>";
+			pdfResultHtml += "<p style='margin:0; padding:0;'><strong>Created On :</strong> "+ global.moment(returnData.get('createdOn')).format('DD-MM-YYYY')+"</p>";
+			
+			var membersList = [];
+			var members = returnData.get('members');
+
+			let createUser = members.find(m=>{
+				return m.id == returnData.get('createdBy');
+			})
+			pdfResultHtml += "<p style='margin:0; padding:0;'><strong>Created By :</strong> "+ createUser.name+"</p>";
+
+			let adminUser = members.find(m=>{
+				return m.admin == 1;
+			})
+			pdfResultHtml += "<p style='margin:0; padding:0;'><strong>Admin  :</strong> "+ adminUser.name+"</p>";
+			pdfResultHtml += "</div>";
+			pdfResultHtml += "<div style='clear:both'></div>";
+			pdfResultHtml += "<hr/>";
+			pdfResultHtml += '<h4>Members</h4>';
+			pdfResultHtml += "<div style='font-size:14px'>";
+			pdfResultHtml += "<table style='width:100%;border:1px solid #CCC' cellpadding='3' cellspacing='0'>"
+			pdfResultHtml += '<thead>';
+			pdfResultHtml += '<tr>';
+			pdfResultHtml += '<th style="text-align:left;border-bottom:1px solid #CCC">Name</th>';
+			pdfResultHtml += '<th style="text-align:left;border-bottom:1px solid #CCC">Deposit</th>';
+			pdfResultHtml += '<th style="text-align:left;border-bottom:1px solid #CCC">Pay</th>';
+			pdfResultHtml += '<th style="text-align:left;border-bottom:1px solid #CCC">Pay Share</th>';
+			pdfResultHtml += '<th style="text-align:left;border-bottom:1px solid #CCC">Balance</th>';
+			pdfResultHtml += '</tr>';
+			pdfResultHtml += '</thead>';
+			pdfResultHtml += '<tbody>';
+			var promises = [];
+			for (let m of members) {
+				promises.push(new Promise(function(resolve, reject) {
+					global.systems.model.expense.payment.getTotalDepositByUser(m.id, returnData.get('_id'), (depositByData)=>{
+
+						global.systems.model.expense.payment.getTotalExpecsePaidByUser(m.id, returnData.get('_id'), (paidByData)=>{
+							global.systems.model.expense.payment.getTotalExpecsePaidForUser(m.id, returnData.get('_id'), (paidForData)=>{
+								
+								pdfResultHtml += '<tr>';
+									pdfResultHtml += '<td>'+m.name+'</td>';
+									pdfResultHtml += '<td>&#8377; '+parseFloat(depositByData).toFixed(2)+'</td>';
+									pdfResultHtml += '<td>&#8377; '+parseFloat(paidByData).toFixed(2)+'</td>';
+									pdfResultHtml += '<td>&#8377; '+parseFloat(paidForData).toFixed(2)+'</td>';
+									pdfResultHtml += '<td>&#8377; '+(parseFloat((depositByData +paidByData ) - paidForData).toFixed(2))+'</td>';
+								pdfResultHtml += '</tr>';
+								resolve(m);
+								
+							});
+							
+						})
+					});
+				}));
+			}
+			Promise.all(promises).then(function(membersList){
+				pdfResultHtml += '<tbody>';
+				pdfResultHtml += "</table>";
+				pdfResultHtml += "</div>";
+				conversion({ html: pdfResultHtml }, function(err, pdf) {
+					var output = global.fs.createWriteStream('public/expense/'+groupId+'.pdf')
+					console.log(pdf.logs);
+					// since pdf.stream is a node.js stream you can use it
+					// to save the pdf to a file (like in this example) or to
+					// respond an http request.
+					pdf.stream.pipe(output);
+					res.send(returnData);
+				});
+			})
+			
+
+/*
+			var promises = [];
+			var totalAmount = 0;
+
+			for (let m of members) {
+				promises.push(new Promise(function(resolve, reject) {
+					
+					global.systems.model.expense.payment.getTotalDepositByUser(m.id, returnData.get('_id'), (depositByData)=>{
+
+						global.systems.model.expense.payment.getTotalExpecsePaidByUser(m.id, returnData.get('_id'), (paidByData)=>{
+							global.systems.model.expense.payment.getTotalExpecsePaidForUser(m.id, returnData.get('_id'), (paidForData)=>{
+								
+								var row = {
+									index : members.indexOf(m),
+									id : m.id,
+									name : m.name,
+									admin : m.admin,
+
+									deposit : parseFloat(depositByData).toFixed(2),
+									paidBy : parseFloat(paidByData).toFixed(2),
+									paidFor : parseFloat(paidForData).toFixed(2),
+									balance : parseFloat((depositByData +paidByData ) - paidForData).toFixed(2)
+								}
+								resolve(row);
+								
+							});
+							
+						})
+					});
+				}) );
+			}
+			Promise.all(promises).then(function(membersList){
+				global.systems.model.expense.payment.getTotalExpecseByGroupAmount(req.body.id, (amount)=>{
+					totalAmount  = amount;
+					res.send({	name : returnData.get('name'), 
+							id : returnData.get('_id'), 
+							createdBy : returnData.get('createdBy'), 
+							createdOn : returnData.get('createdOn'), 
+							startdate : returnData.get('startdate'),
+							totalAmount : parseFloat(totalAmount).toFixed(2),
+							members : membersList});
+				});
+				
+			})*/
+
+			
 		});
 
 
