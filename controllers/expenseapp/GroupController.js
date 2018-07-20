@@ -428,7 +428,7 @@ module.exports = {
 							// to save the pdf to a file (like in this example) or to
 							// respond an http request.
 							pdf.stream.pipe(output);
-							res.send(returnData);
+							res.send({status:1});
 						});
 					})
 				});
