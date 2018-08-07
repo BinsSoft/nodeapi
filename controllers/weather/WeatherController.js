@@ -70,9 +70,9 @@ module.exports = {
                 } else {
                     responseData.iconDay = 'night';
                 }
-                responseData.sys.sunrise = global.moment.unix(responseData.sys.sunrise).format('hh:mm a');
-                responseData.sys.sunset = global.moment.unix(responseData.sys.sunset).format('hh:mm a');
-                responseData.dt = global.moment.unix(responseData.dt).format('HH');
+                //responseData.sys.sunrise = global.moment.unix(responseData.sys.sunrise).format('hh:mm a');
+                //responseData.sys.sunset = global.moment.unix(responseData.sys.sunset).format('hh:mm a');
+                //responseData.dt = global.moment.unix(responseData.dt).format('HH');
                 
                 if (responseData.wind && responseData.wind.deg) {
                     responseData.wind.dist = 'N';
