@@ -421,13 +421,17 @@ var DataController 	= {
 	{
 		const url = 'https://newsapi.org/v2/everything?sources=espn-cric-info&apiKey=3d633c0b1fa9483d94f722b8498f0840';
 		const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-		const file = "public/files/news.json";
+		const file = "public/cric/news.json";
+		var diff = null;
 		if (fs.existsSync(file)) {
 			fs.readFile(file, 'utf8', function (err, newsData){
-				newsData = JSON.parse(newsData);
-				var updateTime = newsData.updatedAt;
-				var diff = moment.duration(moment(currentTime).diff(moment(updateTime)));
-				if (diff.asMinutes() > 30) {
+				if (newsData) {
+					newsData = JSON.parse(newsData);
+					var updateTime = newsData.updatedAt;
+					diff = moment.duration(moment(currentTime).diff(moment(updateTime)));
+				}
+				
+				if (diff === null || diff.asMinutes() > 30) {
 					request(url, function(error, response, news){
 						var storeData ={};
 						storeData['data'] = JSON.parse(news);
