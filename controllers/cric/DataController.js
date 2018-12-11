@@ -74,7 +74,7 @@ var DataController 	= {
 	details : function(req, res) {
 		const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
 		const matchId = req.params.id;
-		const file = "public/files/matches/"+matchId+".json";
+		const file = "public/cric/matches/"+matchId+".json";
 		const url ='http://www.cricbuzz.com/match-api/'+matchId+'/commentary-full.json';
 		if (fs.existsSync(file)) {
 			fs.readFile(file, 'utf8', function (err, matchData){
@@ -119,7 +119,7 @@ var DataController 	= {
 		const matchId = req.params.id;
 		const url = 'http://www.cricbuzz.com/api/html/cricket-scorecard/'+matchId;
 		const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-		const file = "public/files/matches/scores/"+matchId+".json";
+		const file = "public/cric/matches/scores/"+matchId+".json";
 		
 		if (fs.existsSync(file)) {
 			fs.readFile(file, 'utf8', function (err, matchData){
