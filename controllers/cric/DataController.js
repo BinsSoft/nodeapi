@@ -445,6 +445,10 @@ var DataController 	= {
 				}
 			})
 		}
+	},
+
+	notAccess : function(req, res) {
+		res.send("Not accessable");
 	}
 
 }
