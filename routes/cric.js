@@ -9,13 +9,13 @@ global.app.use(function(req, response, next) {
   return next();
 });
 let prefix = process.env.CRIC_APP;
-router.get("/"+prefix+"/", Controller.cric.DataController.notAccess);
-router.get("/"+prefix+"/live-matches", Controller.cric.DataController.index);
-router.get("/"+prefix+"/match/:id", Controller.cric.DataController.details);
-router.get("/"+prefix+"/match-score/:id", Controller.cric.DataController.renderMatchScore);
-router.get("/"+prefix+"/series", Controller.cric.DataController.renderSeries);
-router.get("/"+prefix+"/series-details/:id/:slug", Controller.cric.DataController.renderSerieDetails);
-router.get("/"+prefix+"/ranking/:type", Controller.cric.DataController.randerRanking);
-router.get("/"+prefix+"/ranking/:type/:matchType/:position", Controller.cric.DataController.randerRanking)
-router.get("/"+prefix+"/news", Controller.cric.DataController.renderNews);
+router.post("/"+prefix+"/", Controller.cric.DataController.notAccess);
+router.post("/"+prefix+"/live-matches", Controller.cric.DataController.index);
+router.post("/"+prefix+"/match/:id", Controller.cric.DataController.details);
+router.post("/"+prefix+"/match-score/:id", Controller.cric.DataController.renderMatchScore);
+router.post("/"+prefix+"/series", Controller.cric.DataController.renderSeries);
+router.post("/"+prefix+"/series-details/:id/:slug", Controller.cric.DataController.renderSerieDetails);
+router.post("/"+prefix+"/ranking/:type", Controller.cric.DataController.randerRanking);
+router.post("/"+prefix+"/ranking/:type/:matchType/:position", Controller.cric.DataController.randerRanking)
+router.post("/"+prefix+"/news", Controller.cric.DataController.renderNews);
 module.exports = router;
