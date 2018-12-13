@@ -1,13 +1,13 @@
 var express 	= 	require('express');
 var router 		=   express.Router();
 const Controller = require("../systems/controllers");
-global.app.use(function(req, response, next) {
+/*global.app.use(function(req, response, next) {
    response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     response.setHeader("Access-Control-Allow-Headers", "access-control-allow-credentials,access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,content-type");
   return next();
-});
+});*/
 let prefix = process.env.CRIC_APP;
 router.post("/"+prefix+"/", Controller.cric.DataController.notAccess);
 router.post("/"+prefix+"/live-matches", Controller.cric.DataController.index);
