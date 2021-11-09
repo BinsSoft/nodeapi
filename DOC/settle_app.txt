@@ -1,0 +1,43 @@
+
+Recharge
+CC Bill
+Elec Bill
+Loan Re payment
+Others
+Shettle
+Credit
+
+
+
+welcome Page
+    new user
+        Signup Page
+            Phone No
+            Name
+            Email
+            Passowrd
+    old user
+        Login Page
+            Email/Phone No
+            Passowrd
+
+Dashboard
+    Stat Of listed Item with filter
+    Credit
+    Balance
+
+    Recharge
+    CC Bill
+    Elec Bill
+    Loan Re payment
+    Others
+    Settle
+
+Payment 
+    type
+    amount
+    Person (right now only for recharge)
+    Date
+    
+    
+
