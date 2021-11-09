@@ -1,31 +1,30 @@
 {
-  "name": "coreAppStructure",
-  "version": "1.0.0",
-  "description": "A Application base structure",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "Tonmoy Nandy",
-  "license": "MIT",
-  "dependencies": {
-    "bcrypt": "^1.0.3",
-    "body-parser": "^1.18.2",
-    "cheerio": "^1.0.0-rc.2",
-    "cookies": "^0.7.1",
-    "dotenv": "^5.0.1",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "fs": "0.0.1-security",
-    "http": "0.0.0",
-    "moment": "^2.22.2",
-    "mongodb": "^3.0.7",
-    "mongoose": "^5.0.17",
-    "multer": "^1.3.0",
-    "natives": "^1.1.6",
-    "path": "^0.12.7",
-    "phantom-html-to-pdf": "^0.5.6",
-    "request": "^2.87.0",
-    "socket.io": "^2.1.1"
-  }
+    "name": "coreAppStructure",
+    "version": "1.0.0",
+    "description": "A Application base structure",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Tonmoy Nandy",
+    "license": "MIT",
+    "dependencies": {
+        "bcrypt": "^1.0.3",
+        "body-parser": "^1.18.2",
+        "cheerio": "^1.0.0-rc.2",
+        "cookies": "^0.7.1",
+        "dotenv": "^5.0.1",
+        "express": "^4.16.3",
+        "express-session": "^1.15.6",
+        "fs": "0.0.1-security",
+        "http": "0.0.0",
+        "moment": "^2.22.2",
+        "mongodb": "^3.0.7",
+        "mongoose": "^5.0.17",
+        "multer": "^1.3.0",
+        "natives": "^1.1.6",
+        "path": "^0.12.7",
+        "request": "^2.87.0",
+        "socket.io": "^2.1.1"
+    }
 }
